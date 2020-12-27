@@ -3,5 +3,7 @@
     "block.musicblock.note_block": "Advanced Note Block",
     "item.musicblock.music_processor": "Music Processor",
     "msg.recstart": "Recording Started",
-    "msg.recsave": "Recording Saved"
+    "msg.recsave": "Recording Saved",
+    "msg.overwrite": "Click again to overwrite recording, play to cancel",
+    "msg.unnamed": "Unnamed"
 }

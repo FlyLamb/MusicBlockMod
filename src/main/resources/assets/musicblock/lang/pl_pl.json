@@ -4,5 +4,6 @@
     "item.musicblock.music_processor": "Procesor Muzyczny",
     "msg.recstart": "Rozpoczęto Nagrywanie",
     "msg.recsave": "Zapisano Nagrywanie",
-    "msg.overwrite": "Kliknij jeszcze raz aby nadpisać, zagraj by anulować"
+    "msg.overwrite": "Kliknij jeszcze raz aby nadpisać, zagraj by anulować",
+    "msg.overwrite": "Bez Nazwy"
 }
