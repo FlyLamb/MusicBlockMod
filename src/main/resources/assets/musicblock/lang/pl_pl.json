@@ -1,0 +1,7 @@
+{
+    "block.musicblock.music_block": "Blok Muzyczny",
+    "block.musicblock.note_block": "Zaawansowany Blok Dźwiękowy",
+    "item.musicblock.music_processor": "Procesor Muzyczny",
+    "msg.recstart": "Rozpoczęto Nagrywanie",
+    "msg.recsave": "Zapisano Nagrywanie"  
+}
