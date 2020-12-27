@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "enabled=false": {
+      "model": "musicblock:block/music_block"
+    },
+    "enabled=true": {
+      "model": "musicblock:block/music_block_recording"
+    }
+  }
+}
