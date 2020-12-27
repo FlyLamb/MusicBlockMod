@@ -13,10 +13,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.text.Color;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.util.INBTSerializable;
 import org.apache.logging.log4j.LogManager;
+import sun.java2d.cmm.ColorTransform;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
@@ -115,13 +118,13 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
 
         if(state == 1)
         {
-            playerEntity.sendMessage(new TranslationTextComponent("msg.recstart"),null);
+            playerEntity.sendMessage(new TranslationTextComponent("msg.recsave"),null);
             state = 2;
             world.setBlockState(pos,world.getBlockState(pos).with(MusicBlock.RECORDING,false));
             markDirty();
         }
         else {
-            playerEntity.sendMessage(new TranslationTextComponent("msg.recsave"), null);
+            playerEntity.sendMessage(new TranslationTextComponent("msg.recstart"), null);
             recorded.clear();
             state = 1;
             tick = 0;
