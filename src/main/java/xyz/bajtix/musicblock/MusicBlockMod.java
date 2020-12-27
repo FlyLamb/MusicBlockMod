@@ -3,6 +3,7 @@ package xyz.bajtix.musicblock;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.SpecialRecipeSerializer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
@@ -87,6 +88,14 @@ public class MusicBlockMod
             LOGGER.info("Tile Entity registry!");
 
             teRegistryEvent.getRegistry().register(TileEntityType.Builder.create(MusicBlockTileEntity::new,BlockList.musicBlock).build(null).setRegistryName("music_block"));
+        }
+
+        @SubscribeEvent
+        public static void onRecipeRegistry(final RegistryEvent.Register<IRecipeSerializer<?>> recipeRegistryEvent)
+        {
+            LOGGER.info("Recipe registry!");
+
+            recipeRegistryEvent.getRegistry().register(MusicCloningSerializer.CRAFTING_SPECIAL_MUSICCLONING);
         }
 
     }

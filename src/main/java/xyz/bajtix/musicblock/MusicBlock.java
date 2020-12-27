@@ -17,6 +17,7 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
@@ -62,12 +63,14 @@ public class MusicBlock extends Block {
 
         ListNBT blockMusic = ((MusicBlockTileEntity)worldIn.getTileEntity(pos)).writealldata();
         String author = ((MusicBlockTileEntity)worldIn.getTileEntity(pos)).author;
+        String name = ((MusicBlockTileEntity)worldIn.getTileEntity(pos)).songName;
         if(blockMusic.size() > 0) {
             CompoundNBT nbt = new CompoundNBT();
             nbt.putString("author", author);
             nbt.put("music", blockMusic);
             ItemStack stack = new ItemStack(ItemList.musicBlock, 1, nbt);
             stack.setTag(nbt);
+            stack.setDisplayName(new StringTextComponent(name));
             ItemEntity s = new ItemEntity(worldIn, pos.getX(), pos.getY(), pos.getZ(), stack);
             worldIn.addEntity(s);
         }

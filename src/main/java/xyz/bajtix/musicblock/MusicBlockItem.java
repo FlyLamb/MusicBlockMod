@@ -1,5 +1,6 @@
 package xyz.bajtix.musicblock;
 
+import com.sun.org.apache.xpath.internal.operations.String;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -20,6 +21,7 @@ public class MusicBlockItem extends BlockItem {
     public MusicBlockItem(Block blockIn, Properties builder) {
         super(blockIn, builder);
     }
+
 
 
     @Override
@@ -44,7 +46,7 @@ public class MusicBlockItem extends BlockItem {
             return success;
 
         if(success)
-            ((MusicBlockTileEntity)(context.getWorld().getTileEntity(context.getPos()))).readalldes((ListNBT) nbt.get("music"),nbt.getString("author"));
+            ((MusicBlockTileEntity)(context.getWorld().getTileEntity(context.getPos()))).readalldes((ListNBT) nbt.get("music"),nbt.getString("author"),context.getItem().getDisplayName().getString());
 
         return success;
     }

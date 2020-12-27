@@ -6,20 +6,13 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.state.properties.NoteBlockInstrument;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.text.Color;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.util.INBTSerializable;
-import org.apache.logging.log4j.LogManager;
-import sun.java2d.cmm.ColorTransform;
+
 
 import java.util.ArrayList;
 import java.util.Dictionary;
@@ -66,6 +59,7 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
     private int state = 2; // Play = 0; Record = 1; Idle = 2
 
     public String author;
+    public String songName = new TranslationTextComponent("msg.unnamed").getString();
 
     public void addNote(float frequency, NoteBlockInstrument instrument)
     {
@@ -101,7 +95,7 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
 
     public void play()
     {
-        if(state == 0) {
+        if(state == 0 || state == 3) {
             state = 2;
             tick = 0;
         }
@@ -115,6 +109,13 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
     public void record(PlayerEntity playerEntity)
     {
         author = playerEntity.getDisplayName().getString();
+
+        if(recorded.size() > 0 && state != 3 && state != 1)
+        {
+            state = 3;
+            playerEntity.sendMessage(new TranslationTextComponent("msg.overwrite"),null);
+            return;
+        }
 
         if(state == 1)
         {
@@ -164,6 +165,7 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
         compound = super.write(compound);
         compound.put("noteData",writealldata());
         compound.putString("author",author);
+        compound.putString("name",songName);
         return compound;
     }
 
@@ -193,12 +195,13 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
         }
         tick = 0;
         author = nbt.getString("author");
+        songName = nbt.getString("name");
         this.recorded = r;
         System.out.println("Finished loading notes, final size:" + recorded.size());
 
     }
 
-    public void readalldes(ListNBT musicData, String author)
+    public void readalldes(ListNBT musicData, String author, String songName)
     {
         HashMap<Integer,ArrayList<Note>> r = new HashMap<>();
         System.out.println("Loading note recording:");
@@ -221,5 +224,6 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
         }
         tick = 0;
         this.recorded = r;
+        this.songName = songName;
     }
 }
