@@ -3,5 +3,6 @@
     "block.musicblock.note_block": "Zaawansowany Blok Dźwiękowy",
     "item.musicblock.music_processor": "Procesor Muzyczny",
     "msg.recstart": "Rozpoczęto Nagrywanie",
-    "msg.recsave": "Zapisano Nagrywanie"  
+    "msg.recsave": "Zapisano Nagrywanie",
+    "msg.overwrite": "Kliknij jeszcze raz aby nadpisać, zagraj by anulować"
 }
