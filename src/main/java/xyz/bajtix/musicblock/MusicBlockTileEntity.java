@@ -6,10 +6,12 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.state.properties.NoteBlockInstrument;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.util.INBTSerializable;
 
@@ -95,6 +97,11 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
 
     public void play()
     {
+        for(PlayerEntity p : world.getPlayers())
+        {
+            if(p.getDistanceSq(pos.getX(),pos.getY(),pos.getZ()) < 10)
+                p.sendMessage(new StringTextComponent("Now playing: '" + songName + "' by " + author),null);
+        }
         if(state == 0 || state == 3) {
             state = 2;
             tick = 0;
