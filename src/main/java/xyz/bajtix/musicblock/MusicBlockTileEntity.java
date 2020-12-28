@@ -5,10 +5,15 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.particles.IParticleData;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.state.properties.NoteBlockInstrument;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -66,7 +71,7 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
     /**
      * Song author
      */
-    public String author;
+    public String author = "anonymous";
     /**
      * Song name (defaults to the key specified in lang file as <code>msg.unnamed</code>)
      */
@@ -131,6 +136,13 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
         return  recorded;
     }
 
+    /**
+     * Set the recorded Map. Please do not use this method, unless you know what you are doing
+     * @param recorded The <code>Map< tick[Integer],note[Note] ></code>
+     */
+    public void setRecorded(Map<Integer, ArrayList<Note>> recorded) {
+        this.recorded = recorded;
+    }
 
     /**
      * The amount of entries in the recorded music
@@ -193,8 +205,31 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
     }
 
 
+    //TODO: Cleanup this function
     @Override
     public void tick() {
+
+        if(state == 1) {
+            if(tick % 60 == 0)
+                world.notifyBlockUpdate(pos,world.getBlockState(pos),world.getBlockState(pos),2);
+            BlockPos chunkPos = world.getChunk(pos).getPos().asBlockPos();
+            for (int i = 0; i < 48; i++) {
+                world.addParticle(ParticleTypes.FLAME, chunkPos.getX() + i - 16, pos.getY() + .5d, chunkPos.getZ() - 16, 0, 0.5d, 0);
+            }
+            for (int i = 0; i < 48; i++) {
+                world.addParticle(ParticleTypes.FLAME, chunkPos.getX() + i - 16, pos.getY() + .5d, chunkPos.getZ() + 32, 0, 0.5d, 0);
+            }
+            for (int i = 0; i < 48; i++) {
+                world.addParticle(ParticleTypes.FLAME, chunkPos.getX() - 16, pos.getY() + .5d, chunkPos.getZ() + i - 16, 0, 0.5d, 0);
+            }
+            for (int i = 0; i < 48; i++) {
+                world.addParticle(ParticleTypes.FLAME, chunkPos.getX() + 32, pos.getY() + .5d, chunkPos.getZ() + i - 16, 0, 0.5d, 0);
+            }
+
+        }
+
+
+
         if(state == 2) return;
         tick++;
 
@@ -206,6 +241,7 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
                 }
             }
         }
+
 
         if(tick > 6000)
         {
@@ -398,5 +434,63 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
         tick = 0;
         this.recorded = r;
         this.songName = songName;
+    }
+
+    @Override
+    public CompoundNBT getUpdateTag() {
+        CompoundNBT nbt = super.getUpdateTag();
+        nbt.putString("author",author);
+        nbt.putString("name",songName);
+        nbt.putInt("state",state);
+        nbt.putInt("tick",tick);
+        nbt.put("noteData",getSongDataNBT());
+        return nbt;
+    }
+
+    @Nullable
+    @Override
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        CompoundNBT nbt = super.getUpdateTag();
+        nbt.putString("author",author);
+        nbt.putString("name",songName);
+        nbt.putInt("state",state);
+        nbt.putInt("tick",tick);
+        nbt.put("noteData",getSongDataNBT());
+
+        System.out.println("Sending data : Tick:" + tick + "; State: " + state);
+
+        return new SUpdateTileEntityPacket(getPos(),-1,nbt);
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+        CompoundNBT tag = pkt.getNbtCompound();
+
+        if(tag == null) return;
+        if(!tag.contains("author")) return;
+        if(!tag.contains("name")) return;
+        if(!tag.contains("noteData")) return;
+        if(!tag.contains("state")) return;
+        if(!tag.contains("tick")) return;
+
+        applyNBTSettings((ListNBT) tag.get("noteData"),tag.getString("author"),tag.getString("name"));
+        state = tag.getInt("state");
+        tick = tag.getInt("tick");
+
+        System.out.println("Aquired data from server: Tick:" + tick + "; State: " + state);
+    }
+
+    @Override
+    public void handleUpdateTag(BlockState bs, CompoundNBT tag) {
+        if(tag == null) return;
+        if(!tag.contains("author")) return;
+        if(!tag.contains("name")) return;
+        if(!tag.contains("noteData")) return;
+        if(!tag.contains("state")) return;
+        if(!tag.contains("tick")) return;
+
+        applyNBTSettings((ListNBT) tag.get("noteData"),tag.getString("author"),tag.getString("name"));
+        state = tag.getInt("state");
+        tick = tag.getInt("tick");
     }
 }

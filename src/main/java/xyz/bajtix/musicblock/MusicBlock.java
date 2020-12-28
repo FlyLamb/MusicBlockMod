@@ -8,6 +8,8 @@ import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.particles.BasicParticleType;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -16,6 +18,7 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
@@ -49,6 +52,7 @@ public class MusicBlock extends Block {
         boolean flag = worldIn.isBlockPowered(pos);
         if (flag != state.get(POWERED)) {
             if (flag) {
+                if(worldIn.isRemote) return;
                 ((MusicBlockTileEntity)worldIn.getTileEntity(pos)).play(true);
             }
 
@@ -83,8 +87,11 @@ public class MusicBlock extends Block {
         super.onBlockHarvested(worldIn, pos, state, player);
     }
 
+
     @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+
+
         if (worldIn.isRemote) return ActionResultType.SUCCESS;
         ((MusicBlockTileEntity)worldIn.getTileEntity(pos)).record(player,null);
         return ActionResultType.SUCCESS;

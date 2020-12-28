@@ -24,10 +24,17 @@ public class MusicNoteBlock extends NoteBlock {
     public boolean eventReceived(BlockState state, World worldIn, BlockPos pos, int id, int param) {
         Set<BlockPos> tes =  worldIn.getChunk(pos).getTileEntitiesPos();
 
+        tes.addAll(worldIn.getChunk(pos.add(16,0,0)).getTileEntitiesPos());
+        tes.addAll(worldIn.getChunk(pos.add(-16,0,0)).getTileEntitiesPos());
+        tes.addAll(worldIn.getChunk(pos.add(0,0,16)).getTileEntitiesPos());
+        tes.addAll(worldIn.getChunk(pos.add(0,0,-16)).getTileEntitiesPos());
+
+        tes.addAll(worldIn.getChunk(pos.add(-16,0,-16)).getTileEntitiesPos());
+        tes.addAll(worldIn.getChunk(pos.add(16,0,16)).getTileEntitiesPos());
+        tes.addAll(worldIn.getChunk(pos.add(16,0,-16)).getTileEntitiesPos());
+        tes.addAll(worldIn.getChunk(pos.add(-16,0,16)).getTileEntitiesPos());
+
         net.minecraftforge.event.world.NoteBlockEvent.Play e = new net.minecraftforge.event.world.NoteBlockEvent.Play(worldIn, pos, state, state.get(NOTE), state.get(INSTRUMENT));
-
-
-
 
         if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(e)) return false;
         state = state.with(NOTE, e.getVanillaNoteId()).with(INSTRUMENT, e.getInstrument());
@@ -44,7 +51,6 @@ public class MusicNoteBlock extends NoteBlock {
         }
 
         worldIn.playSound((PlayerEntity)null, pos, state.get(INSTRUMENT).getSound(), SoundCategory.RECORDS, 3.0F, f);
-        //worldIn.addParticle(ParticleTypes.NOTE, (double)pos.getX() + 0.5D, (double)pos.getY() + 1.2D, (double)pos.getZ() + 0.5D, (double)i / 24.0D, 0.0D, 0.0D);
         return true;
     }
 
