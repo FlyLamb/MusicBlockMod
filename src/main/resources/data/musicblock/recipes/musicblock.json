@@ -1,0 +1,20 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    " # ",
+    "#X#",
+    " # "
+  ],
+  "key": {
+    "#": {
+      "item": "musicblock:music_processor"
+    },
+    "X": {
+      "item": "minecraft:jukebox"
+    }
+  },
+  "result": {
+    "item": "musicblock:music_block",
+    "count": 1
+  }
+}
