@@ -49,7 +49,7 @@ public class MusicBlock extends Block {
         boolean flag = worldIn.isBlockPowered(pos);
         if (flag != state.get(POWERED)) {
             if (flag) {
-                ((MusicBlockTileEntity)worldIn.getTileEntity(pos)).play();
+                ((MusicBlockTileEntity)worldIn.getTileEntity(pos)).play(true);
             }
 
             worldIn.setBlockState(pos, state.with(POWERED, Boolean.valueOf(flag)), 3);
@@ -60,7 +60,7 @@ public class MusicBlock extends Block {
     @Override
     public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
 
-        ListNBT blockMusic = ((MusicBlockTileEntity)worldIn.getTileEntity(pos)).writeSongData();
+        ListNBT blockMusic = ((MusicBlockTileEntity)worldIn.getTileEntity(pos)).getSongDataNBT();
         String author = ((MusicBlockTileEntity)worldIn.getTileEntity(pos)).author;
         String name = ((MusicBlockTileEntity)worldIn.getTileEntity(pos)).songName;
         if(blockMusic.size() > 0) {
@@ -86,7 +86,7 @@ public class MusicBlock extends Block {
     @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
         if (worldIn.isRemote) return ActionResultType.SUCCESS;
-        ((MusicBlockTileEntity)worldIn.getTileEntity(pos)).record(player);
+        ((MusicBlockTileEntity)worldIn.getTileEntity(pos)).record(player,null);
         return ActionResultType.SUCCESS;
     }
 

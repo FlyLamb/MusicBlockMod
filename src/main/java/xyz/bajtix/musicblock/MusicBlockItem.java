@@ -44,7 +44,7 @@ public class MusicBlockItem extends BlockItem {
             return success;
 
         if(success)
-            ((MusicBlockTileEntity)(context.getWorld().getTileEntity(context.getPos()))).readAllNBT((ListNBT) nbt.get("music"),nbt.getString("author"),context.getItem().getDisplayName().getString());
+            ((MusicBlockTileEntity)(context.getWorld().getTileEntity(context.getPos()))).applyNBTSettings((ListNBT) nbt.get("music"),nbt.getString("author"),context.getItem().getDisplayName().getString());
 
         return success;
     }
