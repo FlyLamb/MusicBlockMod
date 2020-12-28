@@ -5,5 +5,8 @@
     "msg.recstart": "Rozpoczęto Nagrywanie",
     "msg.recsave": "Zapisano Nagrywanie",
     "msg.overwrite": "Kliknij jeszcze raz aby nadpisać, zagraj by anulować",
-    "msg.overwrite": "Bez Nazwy"
+    "msg.unnamed": "Bez Nazwy",
+    "msg.outoftime": "Koniec czasu nagrywania ",
+    "msg.nowplaying": "Teraz Gra",
+    "msg.by": "Autorstwa"
 }
