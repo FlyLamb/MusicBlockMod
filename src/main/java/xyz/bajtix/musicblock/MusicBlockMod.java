@@ -95,7 +95,7 @@ public class MusicBlockMod
         {
             LOGGER.info("Recipe registry!");
 
-            recipeRegistryEvent.getRegistry().register(MusicCloningSerializer.CRAFTING_SPECIAL_MUSICCLONING);
+            //recipeRegistryEvent.getRegistry().register(MusicCloningSerializer.CRAFTING_SPECIAL_MUSICCLONING);
         }
 
     }

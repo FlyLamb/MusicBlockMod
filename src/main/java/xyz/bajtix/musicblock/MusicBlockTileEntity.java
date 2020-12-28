@@ -208,10 +208,9 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
     //TODO: Cleanup this function
     @Override
     public void tick() {
+        if(state == 2) return;
 
         if(state == 1) {
-            if(tick % 60 == 0)
-                world.notifyBlockUpdate(pos,world.getBlockState(pos),world.getBlockState(pos),2);
             BlockPos chunkPos = world.getChunk(pos).getPos().asBlockPos();
             for (int i = 0; i < 48; i++) {
                 world.addParticle(ParticleTypes.FLAME, chunkPos.getX() + i - 16, pos.getY() + .5d, chunkPos.getZ() - 16, 0, 0.5d, 0);
@@ -225,23 +224,21 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
             for (int i = 0; i < 48; i++) {
                 world.addParticle(ParticleTypes.FLAME, chunkPos.getX() + 32, pos.getY() + .5d, chunkPos.getZ() + i - 16, 0, 0.5d, 0);
             }
-
         }
-
-
-
-        if(state == 2) return;
-        tick++;
 
         if(state == 0)
         {
+
             if(recorded.containsKey(tick)) {
                 for(Note n : recorded.get(tick)) {
                     world.playSound((PlayerEntity) null, pos, n.instrument.getSound(), SoundCategory.RECORDS, volume, n.frequency);
                 }
             }
-        }
+            /*if(tick % 60 == 0)
+                world.notifyBlockUpdate(pos,world.getBlockState(pos),world.getBlockState(pos),2);*/
 
+        }
+        tick++;
 
         if(tick > 6000)
         {
@@ -289,6 +286,7 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
      */
     public int record(@Nullable PlayerEntity playerEntity,@Nullable String author)
     {
+
         if(playerEntity != null)
             lastPlayerRecord = playerEntity;
         if(recorded.size() > 0 && state != 3 && state != 1)
@@ -296,6 +294,7 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
             state = 3;
             if(playerEntity != null)
                 lastPlayerRecord = playerEntity;
+
             playerEntity.sendMessage(new TranslationTextComponent("msg.overwrite"),null);
             return state;
         }
@@ -326,6 +325,9 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
         }
         return state;
     }
+
+
+
 
     /**
      * This function returns song data as NBT
@@ -439,6 +441,8 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
     @Override
     public CompoundNBT getUpdateTag() {
         CompoundNBT nbt = super.getUpdateTag();
+        if(nbt == null) return null;
+
         nbt.putString("author",author);
         nbt.putString("name",songName);
         nbt.putInt("state",state);
@@ -451,6 +455,8 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
         CompoundNBT nbt = super.getUpdateTag();
+
+        if(nbt == null) return new SUpdateTileEntityPacket(getPos(),-1,nbt);
         nbt.putString("author",author);
         nbt.putString("name",songName);
         nbt.putInt("state",state);
