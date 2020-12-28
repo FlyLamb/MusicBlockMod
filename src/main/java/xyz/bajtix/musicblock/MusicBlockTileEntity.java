@@ -59,8 +59,17 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
     private int state = 2; // Play = 0; Record = 1; Idle = 2
 
 
-    float volume = 3;
+    /**
+     * Song volume (pretty sure it can be max. 3)
+     */
+    public float volume = 3;
+    /**
+     * Song author
+     */
     public String author;
+    /**
+     * Song name (defaults to the key specified in lang file as <code>msg.unnamed</code>)
+     */
     public String songName = new TranslationTextComponent("msg.unnamed").getString();
 
     /**
@@ -219,12 +228,6 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
      */
     public void play(boolean announce)
     {
-        if(announce) {
-            for (PlayerEntity p : world.getPlayers()) {
-                if (p.getDistanceSq(pos.getX(), pos.getY(), pos.getZ()) < 80)
-                    p.sendMessage(new StringTextComponent("Now playing: '" + songName + "' by " + author), null);
-            }
-        }
         if(state == 0 || state == 3) {
             state = 2;
             tick = 0;
@@ -233,6 +236,12 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
         {
             state = 0;
             tick = 0;
+            if(announce) {
+                for (PlayerEntity p : world.getPlayers()) {
+                    if (p.getDistanceSq(pos.getX(), pos.getY(), pos.getZ()) < 80)
+                        p.sendMessage(new StringTextComponent(new TranslationTextComponent("msg.nowplaying").getString() + " '" + songName + "' " + new TranslationTextComponent("msg.by").getString() + " " + author), null);
+                }
+            }
         }
     }
 
