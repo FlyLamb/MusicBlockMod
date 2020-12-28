@@ -5,5 +5,8 @@
     "msg.recstart": "Recording Started",
     "msg.recsave": "Recording Saved",
     "msg.overwrite": "Click again to overwrite recording, play to cancel",
-    "msg.unnamed": "Unnamed"
+    "msg.unnamed": "Unnamed",
+    "msg.outoftime": "Out of time, recording halted",
+    "msg.nowplaying": "Now playing",
+    "msg.by": "by"
 }
