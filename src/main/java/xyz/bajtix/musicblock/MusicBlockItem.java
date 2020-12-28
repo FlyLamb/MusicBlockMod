@@ -1,10 +1,8 @@
 package xyz.bajtix.musicblock;
 
-import com.sun.org.apache.xpath.internal.operations.String;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
@@ -46,7 +44,7 @@ public class MusicBlockItem extends BlockItem {
             return success;
 
         if(success)
-            ((MusicBlockTileEntity)(context.getWorld().getTileEntity(context.getPos()))).readalldes((ListNBT) nbt.get("music"),nbt.getString("author"),context.getItem().getDisplayName().getString());
+            ((MusicBlockTileEntity)(context.getWorld().getTileEntity(context.getPos()))).readAllNBT((ListNBT) nbt.get("music"),nbt.getString("author"),context.getItem().getDisplayName().getString());
 
         return success;
     }

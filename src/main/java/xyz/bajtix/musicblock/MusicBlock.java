@@ -5,7 +5,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -61,7 +60,7 @@ public class MusicBlock extends Block {
     @Override
     public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
 
-        ListNBT blockMusic = ((MusicBlockTileEntity)worldIn.getTileEntity(pos)).writealldata();
+        ListNBT blockMusic = ((MusicBlockTileEntity)worldIn.getTileEntity(pos)).writeSongData();
         String author = ((MusicBlockTileEntity)worldIn.getTileEntity(pos)).author;
         String name = ((MusicBlockTileEntity)worldIn.getTileEntity(pos)).songName;
         if(blockMusic.size() > 0) {

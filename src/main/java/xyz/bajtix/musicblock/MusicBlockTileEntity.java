@@ -1,12 +1,10 @@
 package xyz.bajtix.musicblock;
 
-import joptsimple.util.KeyValuePair;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.state.properties.NoteBlockInstrument;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -17,7 +15,6 @@ import net.minecraftforge.common.util.INBTSerializable;
 
 
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,7 +54,7 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
 
     private Map<Integer, ArrayList<Note>> recorded;
     private int tick = 0;
-
+    private PlayerEntity lastPlayerRecord;
     private int state = 2; // Play = 0; Record = 1; Idle = 2
 
     public String author;
@@ -93,13 +90,26 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
                 }
             }
         }
+
+        if(tick > 6000)
+        {
+            if(state == 0)
+            {
+                state = 2;
+                tick = 0;
+            }
+            else if(state == 1)
+            {
+                record(lastPlayerRecord);
+            }
+        }
     }
 
     public void play()
     {
         for(PlayerEntity p : world.getPlayers())
         {
-            if(p.getDistanceSq(pos.getX(),pos.getY(),pos.getZ()) < 10)
+            if(p.getDistanceSq(pos.getX(),pos.getY(),pos.getZ()) < 80)
                 p.sendMessage(new StringTextComponent("Now playing: '" + songName + "' by " + author),null);
         }
         if(state == 0 || state == 3) {
@@ -115,8 +125,8 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
 
     public void record(PlayerEntity playerEntity)
     {
-        author = playerEntity.getDisplayName().getString();
 
+        lastPlayerRecord = playerEntity;
         if(recorded.size() > 0 && state != 3 && state != 1)
         {
             state = 3;
@@ -129,6 +139,7 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
             playerEntity.sendMessage(new TranslationTextComponent("msg.recsave"),null);
             state = 2;
             world.setBlockState(pos,world.getBlockState(pos).with(MusicBlock.RECORDING,false));
+            author = playerEntity.getDisplayName().getString();
             markDirty();
         }
         else {
@@ -141,7 +152,7 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
         }
     }
 
-    public ListNBT writealldata()
+    public ListNBT writeSongData()
     {
         ListNBT musicData = new ListNBT();
 
@@ -170,7 +181,7 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
     @Override
     public CompoundNBT write(CompoundNBT compound) {
         compound = super.write(compound);
-        compound.put("noteData",writealldata());
+        compound.put("noteData", writeSongData());
         compound.putString("author",author);
         compound.putString("name",songName);
         return compound;
@@ -208,7 +219,7 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
 
     }
 
-    public void readalldes(ListNBT musicData, String author, String songName)
+    public void readAllNBT(ListNBT musicData, String author, String songName)
     {
         HashMap<Integer,ArrayList<Note>> r = new HashMap<>();
         System.out.println("Loading note recording:");
