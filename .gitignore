@@ -1,39 +1,7 @@
-# eclipse
-bin
-*.launch
-.settings
-.metadata
-.classpath
-.project
-
-# idea
-out
-*.ipr
-*.iws
-*.iml
-.idea
-
-# gradle
-build
-.gradle
-
-# other
-eclipse
-run
-
-# Files from Forge MDK
-forge*changelog.txt
-
-/*
-!/src/
-!.gitignore
-!gradlew*
-!/gradle/
-!/LICENSE.txt
-!/README.md
-!build.gradle
-!.travis.yml
-!/textures/
-!/gradle.properties
-!.gitattributes
-!ASSETS_LICENSE.txt
+/build/
+/.idea/
+/.gradle/
+/logs/
+/mcmodsrepo/
+/run/
+/mcmodsrepo/
