@@ -1,0 +1,21 @@
+{
+  "type": "crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:note_block"
+    },
+    {
+      "item": "minecraft:note_block"
+    },
+    {
+      "item": "minecraft:note_block"
+    },
+    {
+      "item": "musicblock:music_processor"
+    }
+  ],
+  "result": {
+    "item": "musicblock:note_block",
+    "count":3
+  }
+}
