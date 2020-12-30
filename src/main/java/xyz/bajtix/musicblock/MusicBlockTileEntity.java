@@ -25,12 +25,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MusicBlockTileEntity extends TileEntity implements ITickableTileEntity {
-    public MusicBlockTileEntity() {
-        super(TEList.MUSIC_BLOCK);
-
-        if(recorded == null)
-        recorded = new HashMap<Integer, ArrayList<Note>>();
-    }
 
     public class Note implements INBTSerializable {
         public float frequency;
@@ -76,6 +70,17 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
      * Song name (defaults to the key specified in lang file as <code>msg.unnamed</code>)
      */
     public String songName = new TranslationTextComponent("msg.unnamed").getString();
+
+    public static final int maxTickRecordLength = 12000;
+
+    public MusicBlockTileEntity() {
+        super(TEList.MUSIC_BLOCK);
+
+        if(recorded == null)
+            recorded = new HashMap<Integer, ArrayList<Note>>();
+    }
+
+
 
     /**
      * Adds a note to the recording, with current tick
@@ -173,7 +178,7 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
      */
     public void setNotes(ArrayList<Note> notes, int tick)
     {
-        if(tick > 6000 ) return;
+        if(tick > maxTickRecordLength ) return;
         recorded.put(tick,notes);
     }
 
@@ -240,7 +245,7 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
         }
         tick++;
 
-        if(tick > 6000)
+        if(tick > maxTickRecordLength)
         {
             if(state == 0)
             {
