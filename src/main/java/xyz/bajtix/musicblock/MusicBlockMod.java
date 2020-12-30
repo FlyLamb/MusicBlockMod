@@ -2,6 +2,7 @@ package xyz.bajtix.musicblock;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.SpecialRecipeSerializer;
 import net.minecraft.tileentity.TileEntity;
@@ -94,8 +95,10 @@ public class MusicBlockMod
         public static void onRecipeRegistry(final RegistryEvent.Register<IRecipeSerializer<?>> recipeRegistryEvent)
         {
             LOGGER.info("Recipe registry!");
-
-            //recipeRegistryEvent.getRegistry().register(MusicCloningSerializer.CRAFTING_SPECIAL_MUSICCLONING);
+            SpecialRecipeSerializer<MusicCloningRecipe> musicCloningRecipe = (SpecialRecipeSerializer<MusicCloningRecipe>) new SpecialRecipeSerializer<>(MusicCloningRecipe::new).setRegistryName("crafting_special_musiccloning");
+            recipeRegistryEvent.getRegistry().register(
+                    musicCloningRecipe
+            );
         }
 
     }

@@ -62,21 +62,21 @@ public class MusicCloningRecipe extends SpecialRecipe {
 
     @Override
     public NonNullList<ItemStack> getRemainingItems(CraftingInventory inv) {
-        NonNullList<ItemStack> nonnulllist = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
+        NonNullList<ItemStack> itemlist = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
 
-        for(int i = 0; i < nonnulllist.size(); ++i) {
+        for(int i = 0; i < itemlist.size(); ++i) {
             ItemStack itemstack = inv.getStackInSlot(i);
             if (itemstack.hasContainerItem()) {
-                nonnulllist.set(i, itemstack.getContainerItem());
-            } else if (itemstack.getItem() == ItemList.musicBlock) {
+                itemlist.set(i, itemstack.getContainerItem());
+            } else if (itemstack.getItem() == ItemList.musicBlock && itemstack.hasTag() && itemstack.getTag().contains("author")) {
                 ItemStack itemstack1 = itemstack.copy();
                 itemstack1.setCount(1);
-                nonnulllist.set(i, itemstack1);
+                itemlist.set(i, itemstack1);
                 break;
             }
         }
 
-        return nonnulllist;
+        return itemlist;
     }
 
     /**
@@ -92,6 +92,6 @@ public class MusicCloningRecipe extends SpecialRecipe {
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return null;
+        return Recipes.CRAFTING_SPECIAL_MUSICCLONING;
     }
 }

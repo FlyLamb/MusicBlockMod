@@ -30,6 +30,12 @@ public class MusicBlockItem extends BlockItem {
         if(!stack.getTag().contains("author")) return;
 
         tooltip.add(new StringTextComponent("Recorded by " + stack.getTag().getString("author")));
+        stack.getTag().remove("RepairCost"); //after anvil this is added, but it's useless and annoying and prevents from stacking
+    }
+
+    @Override
+    public boolean hasEffect(ItemStack stack) {
+        return stack.getTag() != null && stack.getTag().contains("author");
     }
 
     @Override

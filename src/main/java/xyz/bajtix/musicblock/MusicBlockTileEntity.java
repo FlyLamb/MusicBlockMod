@@ -271,8 +271,8 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
             tick = 0;
             if(announce) {
                 for (PlayerEntity p : world.getPlayers()) {
-                    if (p.getDistanceSq(pos.getX(), pos.getY(), pos.getZ()) < 80)
-                        p.sendMessage(new StringTextComponent(new TranslationTextComponent("msg.nowplaying").getString() + " '" + songName + "' " + new TranslationTextComponent("msg.by").getString() + " " + author), null);
+                    if (p.getDistanceSq(pos.getX(), pos.getY(), pos.getZ()) < 190)
+                        p.sendMessage(new StringTextComponent(new TranslationTextComponent("msg.nowplaying").getString() + " '" + songName + "' " + new TranslationTextComponent("msg.by").getString() + " " + author), p.getUniqueID());
                 }
             }
         }
@@ -295,14 +295,14 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
             if(playerEntity != null)
                 lastPlayerRecord = playerEntity;
 
-            playerEntity.sendMessage(new TranslationTextComponent("msg.overwrite"),null);
+            playerEntity.sendMessage(new TranslationTextComponent("msg.overwrite"),playerEntity.getUniqueID());
             return state;
         }
 
         if(state == 1)
         {
             if(playerEntity != null)
-                playerEntity.sendMessage(new TranslationTextComponent("msg.recsave"),null);
+                playerEntity.sendMessage(new TranslationTextComponent("msg.recsave"),playerEntity.getUniqueID());
             state = 2;
             world.setBlockState(pos,world.getBlockState(pos).with(MusicBlock.RECORDING,false));
             if(playerEntity != null) {
@@ -316,7 +316,7 @@ public class MusicBlockTileEntity extends TileEntity implements ITickableTileEnt
         }
         else {
             if(playerEntity != null)
-                playerEntity.sendMessage(new TranslationTextComponent("msg.recstart"), null);
+                playerEntity.sendMessage(new TranslationTextComponent("msg.recstart"), playerEntity.getUniqueID());
             recorded.clear();
             state = 1;
             tick = 0;

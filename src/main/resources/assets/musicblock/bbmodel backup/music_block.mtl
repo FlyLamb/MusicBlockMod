@@ -1,0 +1,16 @@
+# Made in Blockbench 3.7.4
+newmtl m_1
+map_Kd note_block.png 
+newmtl m_2
+map_Kd jukebox_top.png 
+newmtl m_3
+map_Kd procesor.png 
+newmtl m_4
+map_Kd jukebox_side_north.png 
+newmtl m_5
+map_Kd jukebox_side.png 
+newmtl m_6
+map_Kd jukebox_side_south.png 
+newmtl m_7
+map_Kd jukebox_side_west.png 
+newmtl none
