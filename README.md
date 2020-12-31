@@ -3,6 +3,8 @@
 A Forge mod that adds programmable music blocks!
 Minecraft version: 1.16.4, should work for other 1.16.
 
+> Quick disclaimer: The code is beeing changed & fixed so it should be a little bit better soon. But hey, for now - It works, it just works.
+
 ## Content and Craftings
 
 ### Music Processor
